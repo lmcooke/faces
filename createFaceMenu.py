@@ -1,19 +1,20 @@
 import maya.cmds as cmds
 
+winID = 'create_face_window'
 
 def create_window():
 	print 'opening create_face_window'
-	winID = 'create_face_window'
-
 	#delete previous create_face_window if it exists
+	print cmds.window(winID, exists=True)
 	if cmds.window(winID, exists=True):
-		cmds.deleteUI(winID)
+		cmds.deleteUI(winID, window=True)
 		print 'here'
 	print 'previous create_face_window deleted'
+	print 'post deletion : ' + str(cmds.window(winID, exists=True))
 
 	#create window
-	cmds.window(winID)
-	parent_window = cmds.window(title='Create New Face', iconName='create_face_window', widthHeight=(400,255))
+	#print 'name of window : ' + cmds.window(winID)
+	parent_window = cmds.window(winID, title='Create New Face', iconName='create_face_window', widthHeight=(400,255))
 	cmds.scrollLayout(width=300, height=300)
 
 	cmds.frameLayout(label='Proportions', collapsable=True, cl=True, mh=35, w=400)
@@ -74,10 +75,26 @@ def create_window():
 	#TODO: create 'random checkbox' --> if random, rest of options should be greyed out
 	cmds.setParent(parent_window)
 	cmds.columnLayout()
-
-	cmds.button(label='Create and Close', command=('createFaceMenu.execute_face_creation()'))
+	# cmds.showWindow()
+	print cmds.window(winID, exists=True)
+	# cmds.button(label='Create and Close', command=('cmds.deleteUI(%s, window=True)' %(winID)))
+	# cmds.button(label='Create and Close', command=('createFaceMenu.execute_face_creation()'))
 	# cmds.button(label='Create and Close', command=('cmds.deleteUI(\"' + window + '\", window=True) createFaceMenu.execute_window'))
 	cmds.showWindow()
+	test = 'test delete'
+	# cmds.button(label='Create and Close', command=('cmds.deleteUI(\'create_face_window\', window=True)'))
+	cmds.button(label='Create and Close', command=('createFaceMenu.execute_face_creation()'))
+
+def execute_face_creation():
+	cmds.deleteUI('create_face_window', window=True)
+	print 'hi luc'
+
+	#TODO create the face
+
+	#TODO : see if 'editable' checkbox was checked
+	create_edit_window()
+	print 'deleted?'
+
 
 def create_edit_window():
 	print 'opening edit_window'
@@ -148,15 +165,3 @@ def create_edit_window():
 	cmds.button(label='Create and Close', command=('createFaceMenu.execute_face_creation()'))
 
 	cmds.showWindow()
-
-
-def execute_face_creation():
-	print "yay executing"
-	cmds.deleteUI(window, window=True)
-	print 'hi luc'
-
-	#TODO create the face
-
-	#TODO : see if 'editable' checkbox was checked
-	create_edit_window()
-	print 'deleted?'
